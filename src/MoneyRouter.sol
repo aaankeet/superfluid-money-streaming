@@ -23,11 +23,16 @@ contract MoneyRouter {
     constructor(address _owner) {
         owner = _owner;
     }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not Authorized");
+        _;
+    }
 
     /// @notice Add account to allow list.
     /// @param _account Account to allow.
-    function allowAccount(address _account) external {
-        if (msg.sender != owner) revert Unauthorized();
+    function allowAccount(address _account) external onlyOwner {
+       
 
         accountList[_account] = true;
     }
@@ -42,9 +47,7 @@ contract MoneyRouter {
 
     /// @notice Transfer ownership.
     /// @param _newOwner New owner account.
-    function changeOwner(address _newOwner) external {
-        if (msg.sender != owner) revert Unauthorized();
-
+    function changeOwner(address _newOwner) external onlyOwner {
         owner = _newOwner;
     }
 
